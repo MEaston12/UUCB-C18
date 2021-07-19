@@ -13,8 +13,14 @@ const userSchema = new Schema({
         match: /.+\@.+\..+/,
         unique: true
     },
-    thoughts: [Number],
-    friends: [Number]
+    thoughts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Thought'
+    }],
+    friends: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User'
+    }]
 });
 
 userSchema.virtual('friendCount').get(() =>  this.friends.length);

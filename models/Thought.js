@@ -4,13 +4,14 @@ const formatTimestamp = date => Intl.DateTimeFormat('en').formatToParts();
 
 const reactionSchema = new Schema({
     reactionId: {
-        type: Types.ObjectId,
-        default: new Types.ObjectId
+        type: Schema.Types.ObjectId,
+        default: () => new Types.ObjectId()
     },
     reactionBody: {
         type: String,
         required: 'Reaction is required.',
-        match: /.{1-280}/
+        minlength: 1,
+        maxlength: 280
     },
     username: {
         type: String,
@@ -27,7 +28,8 @@ const thoughtSchema = new Schema({
     thoughtText: {
         type: String,
         required: 'Thought text is required.',
-        match: /.{1-280}/
+        minlength: 1,
+        maxlength: 280
     },
     createdAt: {
         type: Date,
@@ -40,6 +42,8 @@ const thoughtSchema = new Schema({
     },
     reactions: [reactionSchema]
 });
+
+thoughtSchema.virtual('reactionCount').get(() =>  this.reactions.length);
 
 const Thought = model('Thought', thoughtSchema);
 
